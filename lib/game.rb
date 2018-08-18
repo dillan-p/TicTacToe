@@ -1,14 +1,16 @@
 # frozen_string_literal: true
 
-require 'player/computer_player'
+require_relative 'player/computer_player'
+require_relative 'player/human_player'
 
 class Game
   attr_reader :board
 
-  def initialize(com = ComputerPlayer.new)
+  def initialize(com = ComputerPlayer.new, hum = HumanPlayer.new)
     @board = %w[0 1 2 3 4 5 6 7 8]
     @com = com
-    @hum = 'O' # the user's marker
+    @hum = hum
+    # 'O' # the user's marker
   end
 
   def start_game
@@ -17,19 +19,19 @@ class Game
     puts 'Enter [0-8]:'
     # loop through until the game was won or tied
     until game_is_over(@board) || tie(@board)
-      get_human_spot
+      get_human_spot(@hum)
       eval_board(@com) if !game_is_over(@board) && !tie(@board)
       puts " #{@board[0]} | #{@board[1]} | #{@board[2]} \n===+===+===\n #{@board[3]} | #{@board[4]} | #{@board[5]} \n===+===+===\n #{@board[6]} | #{@board[7]} | #{@board[8]} \n"
     end
     puts 'Game over'
   end
 
-  def get_human_spot
+  def get_human_spot(player)
     spot = nil
     until spot
-      spot = gets.chomp.to_i
-      if @board[spot] != 'X' && @board[spot] != 'O'
-        @board[spot] = @hum
+      spot = player.get_spot
+      if @board[spot] != 'X' && @board[spot] != player.piece
+        @board[spot] = player.piece
       else
         spot = nil
       end
