@@ -4,7 +4,8 @@ require 'spec_helper'
 require 'game'
 
 RSpec.describe Game do
-  let(:game) { Game.new }
+  let(:game) { Game.new(computer) }
+  let(:computer) { double }
 
   describe '#get_human_spot' do
     subject { game.board }
@@ -28,20 +29,19 @@ RSpec.describe Game do
   describe '#eval_board' do
     subject { game.board }
     before do
-      allow_any_instance_of(Game)
-        .to receive(:get_best_move)
-        .and_return(4, 4, 2)
+      allow(computer).to receive(:get_spot).and_return(4, 4, 2)
+      allow(computer).to receive(:piece) { 'X' }
     end
 
     context 'when spot is empty' do
-      before { game.eval_board }
+      before { game.eval_board(computer) }
       it { is_expected.to eq(%w[0 1 2 3 X 5 6 7 8]) }
     end
 
     context 'when spot isn\'t empty' do
-      before { 2.times { game.eval_board } }
+      before { 2.times { game.eval_board(computer) } }
       it 'looks for another best move' do
-        expect(game).to have_received(:get_best_move).exactly(3)
+        expect(computer).to have_received(:get_spot).exactly(3)
       end
     end
   end

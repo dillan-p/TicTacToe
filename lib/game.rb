@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 
+require 'player/computer_player'
+
 class Game
   attr_reader :board
 
-  def initialize
+  def initialize(com = ComputerPlayer.new)
     @board = %w[0 1 2 3 4 5 6 7 8]
-    @com = 'X' # the computer's marker
+    @com = com
     @hum = 'O' # the user's marker
   end
 
@@ -16,7 +18,7 @@ class Game
     # loop through until the game was won or tied
     until game_is_over(@board) || tie(@board)
       get_human_spot
-      eval_board if !game_is_over(@board) && !tie(@board)
+      eval_board(@com) if !game_is_over(@board) && !tie(@board)
       puts " #{@board[0]} | #{@board[1]} | #{@board[2]} \n===+===+===\n #{@board[3]} | #{@board[4]} | #{@board[5]} \n===+===+===\n #{@board[6]} | #{@board[7]} | #{@board[8]} \n"
     end
     puts 'Game over'
@@ -34,48 +36,15 @@ class Game
     end
   end
 
-  def eval_board
+  def eval_board(player)
     spot = nil
     until spot
-      spot = get_best_move(@board, @com)
-      if @board[spot] != 'X' && @board[spot] != 'O'
-        @board[spot] = @com
+      spot = player.get_spot(@board, player.piece)
+      if @board[spot] != player.piece && @board[spot] != 'O'
+        @board[spot] = player.piece
       else
         spot = nil
       end
-    end
-  end
-
-  def get_best_move(board, _next_player, _depth = 0, _best_score = {})
-    return 4 if @board[4] == '4'
-
-    available_spaces = []
-    best_move = nil
-    board.each do |s|
-      available_spaces << s if s != 'X' && s != 'O'
-    end
-    available_spaces.each do |as|
-      board[as.to_i] = @com
-      if game_is_over(board)
-        best_move = as.to_i
-        board[as.to_i] = as
-        return best_move
-      else
-        board[as.to_i] = @hum
-        if game_is_over(board)
-          best_move = as.to_i
-          board[as.to_i] = as
-          return best_move
-        else
-          board[as.to_i] = as
-        end
-      end
-    end
-    if best_move
-      return best_move
-    else
-      n = rand(0..available_spaces.count)
-      return available_spaces[n].to_i
     end
   end
 
@@ -93,7 +62,6 @@ class Game
   def tie(b)
     b.all? { |s| s == 'X' || s == 'O' }
   end
-
 end
 
 # game = Game.new
