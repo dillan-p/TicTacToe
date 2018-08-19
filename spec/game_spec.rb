@@ -14,7 +14,6 @@ RSpec.describe Game do
   end
 
   describe '#make_move' do
-    subject { game.board }
     describe 'as a human' do
       before do
         allow(human).to receive(:get_spot).and_return(0, 0, 1)
@@ -22,12 +21,19 @@ RSpec.describe Game do
 
       context 'when spot is empty' do
         before { game.make_move(human) }
-        it { is_expected.to eq(%w[O 1 2 3 4 5 6 7 8]) }
+        it 'makes the move' do
+          expect(human).to have_received(:get_spot).exactly(1)
+        end
       end
 
-      # context 'when spot isn\'t empty' do
-
-      # end
+      context 'when spot isn\'t empty' do
+        before do
+          2.times { game.make_move(human) }
+        end
+        it 'makes the move' do
+          expect(human).to have_received(:get_spot).exactly(3)
+        end
+      end
     end
 
     describe 'as a computer' do
@@ -37,11 +43,15 @@ RSpec.describe Game do
 
       context 'when spot is empty' do
         before { game.make_move(computer) }
-        it { is_expected.to eq(%w[0 1 2 3 X 5 6 7 8]) }
+        it 'makes the move' do
+          expect(computer).to have_received(:get_spot).exactly(1)
+        end
       end
 
       context 'when spot isn\'t empty' do
-        before { 2.times { game.make_move(computer) } }
+        before do
+          2.times { game.make_move(computer) }
+        end
         it 'looks for another best move' do
           expect(computer).to have_received(:get_spot).exactly(3)
         end
