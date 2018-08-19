@@ -7,8 +7,12 @@ require_relative 'board'
 class Game
   attr_reader :board
 
-  def initialize(com = ComputerPlayer.new, hum = HumanPlayer.new)
-    @board = Board.new
+  def initialize(
+    com = ComputerPlayer.new,
+    hum = HumanPlayer.new,
+    board = Board.new
+  )
+    @board = board
     @com = com
     @hum = hum
   end
