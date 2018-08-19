@@ -10,7 +10,6 @@ class Game
     @board = %w[0 1 2 3 4 5 6 7 8]
     @com = com
     @hum = hum
-    # 'O' # the user's marker
   end
 
   def start_game
@@ -19,34 +18,17 @@ class Game
     puts 'Enter [0-8]:'
     # loop through until the game was won or tied
     until game_is_over(@board) || tie(@board)
-      get_human_spot(@hum)
-      eval_board(@com) if !game_is_over(@board) && !tie(@board)
+      make_move(@hum)
+      make_move(@com) if !game_is_over(@board) && !tie(@board)
       puts " #{@board[0]} | #{@board[1]} | #{@board[2]} \n===+===+===\n #{@board[3]} | #{@board[4]} | #{@board[5]} \n===+===+===\n #{@board[6]} | #{@board[7]} | #{@board[8]} \n"
     end
     puts 'Game over'
   end
 
-  def get_human_spot(player)
-    spot = nil
-    until spot
-      spot = player.get_spot
-      if @board[spot] != 'X' && @board[spot] != player.piece
-        @board[spot] = player.piece
-      else
-        spot = nil
-      end
-    end
-  end
-
-  def eval_board(player)
-    spot = nil
-    until spot
-      spot = player.get_spot(@board, player.piece)
-      if @board[spot] != player.piece && @board[spot] != 'O'
-        @board[spot] = player.piece
-      else
-        spot = nil
-      end
+  def make_move(player)
+    loop do
+      spot = player.get_spot(@board, @hum.piece)
+      break if set_piece(spot, player.piece)
     end
   end
 
@@ -63,6 +45,16 @@ class Game
 
   def tie(b)
     b.all? { |s| s == 'X' || s == 'O' }
+  end
+
+  private
+
+  def set_piece(spot, piece)
+    @board[spot] = piece unless spot_taken?(spot)
+  end
+
+  def spot_taken?(spot)
+    %w[X O].include?(@board[spot])
   end
 end
 

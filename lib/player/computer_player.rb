@@ -7,7 +7,7 @@ class ComputerPlayer
     @piece = 'X'
   end
 
-  def get_spot(board, _next_player, _depth = 0, _best_score = {})
+  def get_spot(board, next_player_piece, _depth = 0, _best_score = {})
     return 4 if board[4] == '4'
 
     available_spaces = []
@@ -16,13 +16,13 @@ class ComputerPlayer
       available_spaces << s if s != 'X' && s != 'O'
     end
     available_spaces.each do |as|
-      board[as.to_i] = @com
+      board[as.to_i] = @piece
       if game_is_over(board)
         best_move = as.to_i
         board[as.to_i] = as
         return best_move
       else
-        board[as.to_i] = @hum
+        board[as.to_i] = next_player_piece
         if game_is_over(board)
           best_move = as.to_i
           board[as.to_i] = as

@@ -4,7 +4,7 @@ require 'spec_helper'
 require 'player/human_player'
 
 RSpec.describe HumanPlayer do
-  let(:human_player) { HumanPlayer.new }
+  let(:human_player) { described_class.new }
 
   describe '#get_move' do
     subject { human_player.get_spot }
