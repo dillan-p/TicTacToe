@@ -24,10 +24,10 @@ RSpec.describe ConsoleUi do
     context 'when input is invalid' do
       before do
         allow(described_class).to receive(:user_input)
-          .and_raise(InvalidInputError)
+          .and_raise(InvalidInputError).and_return('1')
       end
 
-      it 'doesn\'t throws an error' do
+      it 'doesn\'t throw an error' do
         expect { described_class.game_type(range) }.to_not raise_error
       end
     end
@@ -47,7 +47,7 @@ RSpec.describe ConsoleUi do
     context 'when input is invalid' do
       before do
         allow(described_class).to receive(:user_input)
-          .and_raise(InvalidInputError)
+          .and_raise(InvalidInputError).and_return('1')
       end
 
       it 'doesn\'t throw an error' do
@@ -71,7 +71,7 @@ RSpec.describe ConsoleUi do
     context 'when input is invalid' do
       before do
         allow(described_class).to receive(:user_input)
-          .and_raise(InvalidInputError)
+          .and_raise(InvalidInputError).and_return('1')
       end
 
       it 'doesn\'t throws an error' do
@@ -86,6 +86,14 @@ RSpec.describe ConsoleUi do
     it 'print the grid' do
       expect { described_class.render_grid(grid) }.to output(
         " 0 | 1 | 2 \n===+===+===\n 3 | 4 | 5 \n===+===+===\n 6 | 7 | 8 \n"
+      ).to_stdout
+    end
+  end
+
+  describe '#game_over' do
+    it 'prints the game is finished' do
+      expect { described_class.game_over }.to output(
+        "Game Over!\n"
       ).to_stdout
     end
   end

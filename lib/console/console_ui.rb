@@ -48,6 +48,10 @@ class ConsoleUi
     retry
   end
 
+  def self.game_over
+    puts 'Game Over!'
+  end
+
   def self.render_grid(grid)
     puts  " #{grid[0]} | #{grid[1]} | #{grid[2]} "\
           "\n===+===+===\n"\
@@ -56,5 +60,3 @@ class ConsoleUi
           " #{grid[6]} | #{grid[7]} | #{grid[8]} \n"
   end
 end
-
-ConsoleUi.game_type((1..3))

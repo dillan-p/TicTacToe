@@ -13,6 +13,7 @@ RSpec.describe Game do
     allow(human).to receive(:piece) { 'O' }
     allow(computer).to receive(:piece) { 'X' }
     allow(board).to receive(:grid) { [] }
+    allow(board).to receive(:available_spots) { %w[] }
   end
 
   describe '#start_game' do

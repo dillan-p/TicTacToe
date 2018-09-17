@@ -51,4 +51,19 @@ RSpec.describe Board do
       it { is_expected.to eq(true) }
     end
   end
+
+  describe '#available_spots' do
+    subject { board.available_spots }
+    context 'when all spots are available' do
+      it { is_expected.to eq(%w[0 1 2 3 4 5 6 7 8]) }
+    end
+
+    context 'when no spots are available' do
+      before do
+        9.times { |i| board.set_piece(i, 'X') }
+      end
+
+      it { is_expected.to eq(%w[]) }
+    end
+  end
 end

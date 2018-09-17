@@ -5,7 +5,7 @@ module ComputerPlayer
     mod.type = :Computer
   end
 
-  def get_spot(board, next_player_piece, _depth = 0, _best_score = {})
+  def get_spot(board, next_player_piece, _ui = nil, _range=nil, _depth = 0, _best_score = {})
     return 4 if board[4] == '4'
 
     available_spaces = []

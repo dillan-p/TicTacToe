@@ -26,7 +26,7 @@ RSpec.describe ConsoleInput do
       it 'throws an error' do
         expect { instance.user_input((1..3)) }.to raise_error(
           InvalidInputError,
-          '4'
+          "\n4 is not a valid option\n\n"
         )
       end
     end
