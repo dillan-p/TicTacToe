@@ -27,6 +27,10 @@ class Board
       [b[2], b[4], b[6]].uniq.length == 1
   end
 
+  def available_spots
+    @grid.reject { |i| %w[X O].include?(i) }
+  end
+
   private
 
   def spot_taken?(spot)
