@@ -1,10 +1,8 @@
 # frozen_string_literal: true
 
-class ComputerPlayer
-  attr_reader :piece
-
-  def initialize
-    @piece = 'X'
+module ComputerPlayer
+  def self.extended(mod)
+    mod.type = :Computer
   end
 
   def get_spot(board, next_player_piece, _depth = 0, _best_score = {})

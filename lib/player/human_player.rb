@@ -2,11 +2,9 @@
 
 class InvalidInputError < StandardError; end
 
-class HumanPlayer
-  attr_reader :piece
-
-  def initialize
-    @piece = 'O'
+module HumanPlayer
+  def self.extended(mod)
+    mod.type = :Human
   end
 
   def get_spot(_board = nil, _piece = nil)
