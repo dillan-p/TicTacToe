@@ -1,12 +1,19 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
+require 'player/player'
 require 'player/human_player'
 
-RSpec.describe HumanPlayer do
-  let(:human_player) { described_class.new }
+RSpec.shared_examples 'a Human' do
+  let(:human_player) { described_class.new.extend(HumanPlayer) }
 
-  describe '#get_move' do
+  context 'type' do
+    it 'should be :Human' do
+      expect(human_player.type).to eq(:Human)
+    end
+  end
+
+  describe '#get_spot' do
     subject { human_player.get_spot }
 
     context 'when spot is valid' do
@@ -30,4 +37,8 @@ RSpec.describe HumanPlayer do
       end
     end
   end
+end
+
+RSpec.describe Player do
+  it_behaves_like 'a Human'
 end
