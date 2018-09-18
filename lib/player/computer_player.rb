@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 
-module ComputerPlayer
-  def self.extended(mod)
-    mod.type = :Computer
+require_relative 'player'
+
+class ComputerPlayer
+  include Player
+
+  def initialize(piece)
+    super(piece, :Computer)
   end
 
   def get_spot(board, next_player_piece, _ui = nil, _range=nil, _depth = 0, _best_score = {})

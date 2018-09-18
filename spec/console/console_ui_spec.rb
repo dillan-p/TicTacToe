@@ -5,9 +5,6 @@ require 'console/console_ui'
 require 'console/console_input'
 
 RSpec.describe ConsoleUi do
-  let(:player1) { double(:player1, type: 'X') }
-  let(:player2) { double(:player2, type: 'O') }
-
   let(:range) { (1..1) }
 
   describe '#game_type' do
@@ -34,7 +31,7 @@ RSpec.describe ConsoleUi do
   end
 
   describe '#player_piece' do
-    subject { described_class.player_piece(player1, player2, range) }
+    subject { described_class.player_piece(range) }
 
     context 'when input is valid' do
       before do
@@ -51,7 +48,7 @@ RSpec.describe ConsoleUi do
       end
 
       it 'doesn\'t throw an error' do
-        expect { described_class.player_piece(player1, player2, range) }
+        expect { described_class.player_piece(range) }
           .to_not raise_error
       end
     end

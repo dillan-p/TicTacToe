@@ -13,26 +13,24 @@ class Setup
   end
 
   def setup_players
-    create_players
-    assign_player_pieces
+    player_types = create_players
+    assign_player_pieces(player_types)
     set_player_order
   end
 
   private
 
   def create_players
-    game_type = @ui.game_type((1..3))
-    @player1, @player2 = PlayerFactory.create(game_type)
+    @ui.game_type((1..3))
   end
 
-  def assign_player_pieces
-    piece_choice = @ui.player_piece(@player1, @player2, (1..2))
-    @player1.piece, @player2.piece = PlayerFactory.assign_pieces(piece_choice)
+  def assign_player_pieces(player_types)
+    piece_choice = @ui.player_piece((1..2))
+    @player1, @player2 = PlayerFactory.create(player_types, piece_choice)
   end
 
   def set_player_order
     player_order = @ui.player_order(@player1, @player2, (1..2))
-    puts player_order
     @player1, @player2 = @player2, @player1 if player_order == 2
   end
 end

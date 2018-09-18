@@ -17,10 +17,10 @@ class ConsoleUi
     retry
   end
 
-  def self.player_piece(player1, player2, value_range)
+  def self.player_piece(value_range)
     puts 'Which piece allocation would you like?'
-    puts "1 - #{player1.type}: O, #{player2.type}: X"
-    puts "2 - #{player1.type}: X, #{player2.type}: O"
+    puts "1 - Player 1: O, Player 2: X"
+    puts "2 - Player 1: X, Player 2: O"
 
     user_input(value_range)
   rescue InvalidInputError => e

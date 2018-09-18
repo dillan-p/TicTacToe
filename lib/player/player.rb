@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-class Player
+module Player
   attr_accessor :piece, :type
 
-  def initialize
+  def initialize(piece, type)
     @piece = piece
     @type = type
   end
