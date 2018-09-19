@@ -9,8 +9,8 @@ class Board
 
   attr_reader :grid
 
-  def initialize
-    @grid = Array.new(9)
+  def initialize(grid = nil)
+    @grid = grid || Array.new(9)
   end
 
   def set_piece(spot, piece)
@@ -27,6 +27,12 @@ class Board
              @grid[a] == @grid[c] &&
              !@grid[a].nil?
     end
+  end
+
+  def new_board(spot, piece)
+    board = self.class.new(@grid.dup)
+    board.set_piece(spot, piece)
+    board
   end
 
   private

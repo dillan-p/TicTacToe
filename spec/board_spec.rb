@@ -4,7 +4,8 @@ require 'spec_helper'
 require 'board'
 
 RSpec.describe Board do
-  let(:board) { described_class.new }
+  let(:board) { described_class.new(grid) }
+  let(:grid) { Array.new(9) }
 
   describe '#set_piece' do
     subject { board.set_piece(0, 'X') }
@@ -13,7 +14,7 @@ RSpec.describe Board do
     end
 
     context 'when spot is taken' do
-      before { board.set_piece(0, 'O') }
+      let(:grid) { ['X'].fill(nil, 1, 8) }
       it { is_expected.to eq(nil) }
     end
   end
@@ -25,15 +26,12 @@ RSpec.describe Board do
     end
 
     context 'when some spots are free' do
-      before { board.set_piece(0, 'X') }
+      let(:grid) { ['X'].fill(nil, 1, 8) }
       it { is_expected.to eq(false) }
     end
 
     context 'when no spots are free' do
-      before do
-        (0..4).each { |i| board.set_piece(i, 'X') }
-        (5..8).each { |i| board.set_piece(i, 'O') }
-      end
+      let(:grid) { %w[X X X X O O O O O] }
       it { is_expected.to eq(true) }
     end
   end
@@ -45,18 +43,40 @@ RSpec.describe Board do
     end
 
     context 'when there isn\'t a winner for a non-empty board' do
-      before do
-        2.times { |i| board.set_piece(i, 'X') }
-        2.times { |i| board.set_piece(i, 'O') }
-      end
+      let(:grid) { ['X', 'X', 'O', 'O', nil, nil, nil, nil, nil] }
       it { is_expected.to eq(false) }
     end
 
     context 'when there is a winner' do
-      before do
-        3.times { |i| board.set_piece(i, 'X') }
-      end
+      let(:grid) { ['X', 'X', 'X'].fill(nil, 3, 6) }
       it { is_expected.to eq(true) }
+    end
+  end
+
+  describe '#new_board' do
+    let(:spot) { 0 }
+    let(:piece) { 'X' }
+
+    it 'returns a board' do
+      expect(board.new_board(spot, piece)).to be_a(Board)
+    end
+
+    context 'when board is empty' do
+      it 'sets a piece on the old board' do
+        expect(board.new_board(spot, piece).grid).to eq(['X'].fill(nil, 1, 8))
+      end
+    end
+
+    context 'when board isn\'t empty' do
+      let(:grid) {
+        [nil, 'X', 'O', nil, nil, nil, nil, nil, nil]
+      }
+
+      it 'sets a piece on the old board' do
+        expect(board.new_board(spot, piece).grid).to eq(
+          ['X', 'X', 'O', nil, nil, nil, nil, nil, nil]
+        )
+      end
     end
   end
 end
