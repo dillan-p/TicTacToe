@@ -2,11 +2,7 @@
 
 require_relative 'player'
 
-class InvalidInputError < StandardError; end
-
-class HumanPlayer
-  include Player
-
+class HumanPlayer < Player
   def initialize(piece)
     super(piece, :Human)
   end

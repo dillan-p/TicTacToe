@@ -4,7 +4,8 @@ require 'spec_helper'
 require 'game'
 
 RSpec.describe Game do
-  let(:game) { described_class.new(computer, human, board) }
+  let(:game) { described_class.new(players, board) }
+  let(:players) { [computer, human] }
   let(:computer) { double }
   let(:human) { double }
   let(:board) { double }

@@ -6,9 +6,9 @@ require_relative 'console/console_ui'
 class Game
   attr_reader :board
 
-  def initialize(player1, player2, board = Board.new, ui = ConsoleUi)
+  def initialize(players, board = Board.new, ui = ConsoleUi)
     @board = board
-    @players = [player1, player2]
+    @players = players
     @ui = ui
   end
 

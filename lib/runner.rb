@@ -11,7 +11,7 @@ class Runner
 
   def run
     @players.setup_players
-    Game.new(@players.player1, @players.player2).start_game
+    Game.new([@players]).start_game
   end
 end
 

@@ -2,9 +2,7 @@
 
 require_relative 'player'
 
-class ComputerPlayer
-  include Player
-
+class ComputerPlayer < Player
   def initialize(piece)
     super(piece, :Computer)
   end
