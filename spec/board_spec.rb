@@ -40,7 +40,15 @@ RSpec.describe Board do
 
   describe '#winner?' do
     subject { board.winner? }
-    context 'when there isn\'t a winner' do
+    context 'when there isn\'t a winner for an empty board' do
+      it { is_expected.to eq(false) }
+    end
+
+    context 'when there isn\'t a winner for a non-empty board' do
+      before do
+        2.times { |i| board.set_piece(i, 'X') }
+        2.times { |i| board.set_piece(i, 'O') }
+      end
       it { is_expected.to eq(false) }
     end
 
@@ -49,21 +57,6 @@ RSpec.describe Board do
         3.times { |i| board.set_piece(i, 'X') }
       end
       it { is_expected.to eq(true) }
-    end
-  end
-
-  describe '#available_spots' do
-    subject { board.available_spots }
-    context 'when all spots are available' do
-      it { is_expected.to eq(%w[0 1 2 3 4 5 6 7 8]) }
-    end
-
-    context 'when no spots are available' do
-      before do
-        9.times { |i| board.set_piece(i, 'X') }
-      end
-
-      it { is_expected.to eq(%w[]) }
     end
   end
 end

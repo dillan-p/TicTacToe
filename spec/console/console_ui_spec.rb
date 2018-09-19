@@ -78,12 +78,21 @@ RSpec.describe ConsoleUi do
   end
 
   describe '#render_grid' do
-    let(:grid) { %w[0 1 2 3 4 5 6 7 8 9] }
+    let(:grid) { Array.new(9, 'X') }
 
-    it 'print the grid' do
+    it 'prints the grid' do
       expect { described_class.render_grid(grid) }.to output(
-        " 0 | 1 | 2 \n===+===+===\n 3 | 4 | 5 \n===+===+===\n 6 | 7 | 8 \n"
+        " X | X | X \n===+===+===\n X | X | X \n===+===+===\n X | X | X \n"
       ).to_stdout
+    end
+
+    context 'when there are empty grid items' do
+      let(:grid) { Array.new(9) }
+      it 'replaces empty items with a space' do
+        expect { described_class.render_grid(grid) }.to output(
+          " \s | \s | \s \n===+===+===\n \s | \s | \s \n===+===+===\n \s | \s | \s \n"
+        ).to_stdout
+      end
     end
   end
 

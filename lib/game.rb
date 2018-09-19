@@ -15,7 +15,7 @@ class Game
   def start_game
     @ui.render_grid(@board.grid)
     until game_is_over?
-      make_move(current_player) unless game_is_over?
+      make_move(current_player)
       @players = @players.rotate
     end
     @ui.game_over
