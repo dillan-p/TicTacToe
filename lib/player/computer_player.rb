@@ -12,16 +12,14 @@ class ComputerPlayer < Player
     return depth - 10 if board.win_for?(opponent_piece)
     return 0 if board.full?
 
-    depth += 1
-
     board.available_spots.each do |spot|
       board.set_piece(spot, board.active_piece)
-      scores[spot] = get_spot(board, opponent_piece, depth)
+      scores[spot] = get_spot(board, opponent_piece, depth += 1, {})
+      puts spot if depth == 0
       board.reset_spot(spot)
     end
 
     if depth == board.available_spots.length
-      puts scores
       return scores.max_by { |_move, result| result }[0]
     end
 
