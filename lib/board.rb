@@ -17,22 +17,20 @@ class Board
     @grid[spot] = piece unless spot_taken?(spot)
   end
 
-  def tie?
-    @grid.all? { |s| %w[X O].include?(s) }
+  def full?
+    !@grid.include?(nil)
   end
 
-  def winner?
-    WINNING_COMBINATIONS.each do |a, b, c|
-      return @grid[a] == @grid[b] &&
-             @grid[a] == @grid[c] &&
-             !@grid[a].nil?
+  def win_for?(piece)
+    WINNING_COMBINATIONS.any? do |a, b, c|
+      @grid[a] == piece &&
+        @grid[b] == piece &&
+        @grid[c] == piece
     end
   end
 
-  def new_board(spot, piece)
-    board = self.class.new(@grid.dup)
-    board.set_piece(spot, piece)
-    board
+  def available_spots
+    @grid.each_index.select { |i| @grid[i].nil? }
   end
 
   private

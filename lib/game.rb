@@ -15,16 +15,16 @@ class Game
   def start_game
     @ui.render_grid(@board.grid)
     until game_is_over?
-      make_move(current_player)
+      make_move
       @players = @players.rotate
     end
     @ui.game_over
   end
 
-  def make_move(player)
+  def make_move
     loop do
       # temp workaround before computer player changed
-      spot = player.get_spot(@board.grid, @players[1].piece, @ui, (0..8))
+      spot = current_player.get_spot(@board.grid, next_player.piece, @ui, (0..8))
       break if @board.set_piece(spot, current_player.piece)
     end
     @ui.render_grid(@board.grid)
@@ -36,7 +36,12 @@ class Game
     @players[0]
   end
 
+  def next_player
+    @players[1]
+  end
+
   def game_is_over?
-    @board.winner? || @board.tie?
+    # just calculate winner for the last players turn (which is the next player)
+    @board.win_for?(next_player.piece) || @board.full?
   end
 end

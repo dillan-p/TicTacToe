@@ -19,8 +19,8 @@ RSpec.describe Board do
     end
   end
 
-  describe '#tie?' do
-    subject { board.tie? }
+  describe '#full?' do
+    subject { board.full? }
     context 'when all spots are free' do
       it { is_expected.to eq(false) }
     end
@@ -36,8 +36,10 @@ RSpec.describe Board do
     end
   end
 
-  describe '#winner?' do
-    subject { board.winner? }
+  describe '#win_for?' do
+    let(:piece) { 'X' }
+    subject { board.win_for?(piece) }
+
     context 'when there isn\'t a winner for an empty board' do
       it { is_expected.to eq(false) }
     end
@@ -47,36 +49,38 @@ RSpec.describe Board do
       it { is_expected.to eq(false) }
     end
 
-    context 'when there is a winner' do
-      let(:grid) { ['X', 'X', 'X'].fill(nil, 3, 6) }
+    context 'when there is a horizontal winner' do
+      let(:grid) { %w[X X X].fill(nil, 3, 6) }
+      it { is_expected.to eq(true) }
+    end
+
+    context 'when there is a vertical winner' do
+      let(:grid) { ['X', nil, nil, 'X', nil, nil, 'X', nil, nil] }
+      it { is_expected.to eq(true) }
+    end
+
+    context 'when there is a diagonal winner' do
+      let(:grid) { ['X', nil, nil, nil, 'X', nil, nil, nil, 'X'] }
       it { is_expected.to eq(true) }
     end
   end
 
-  describe '#new_board' do
-    let(:spot) { 0 }
-    let(:piece) { 'X' }
-
-    it 'returns a board' do
-      expect(board.new_board(spot, piece)).to be_a(Board)
-    end
-
+  describe '#available_spots' do
+    subject { board.available_spots }
     context 'when board is empty' do
-      it 'sets a piece on the old board' do
-        expect(board.new_board(spot, piece).grid).to eq(['X'].fill(nil, 1, 8))
-      end
+      it { is_expected.to eq((0..8).to_a) }
     end
 
-    context 'when board isn\'t empty' do
-      let(:grid) {
-        [nil, 'X', 'O', nil, nil, nil, nil, nil, nil]
-      }
+    context 'when board is full' do
+      let(:grid) { Array.new(9, 'X') }
 
-      it 'sets a piece on the old board' do
-        expect(board.new_board(spot, piece).grid).to eq(
-          ['X', 'X', 'O', nil, nil, nil, nil, nil, nil]
-        )
-      end
+      it { is_expected.to eq([]) }
+    end
+
+    context 'when board is neither full nor empty' do
+      let(:grid) { %w[X O].fill(nil, 2, 7) }
+
+      it { is_expected.to eq((2..8).to_a) }
     end
   end
 end
