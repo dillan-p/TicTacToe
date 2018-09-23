@@ -36,6 +36,11 @@ class Board
     @grid.each_index.select { |i| @grid[i].nil? }
   end
 
+  def reset_spot(spot)
+    @grid[spot] = nil
+    change_active_piece
+  end
+
   private
 
   def spot_taken?(spot)

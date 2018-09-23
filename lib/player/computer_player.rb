@@ -7,49 +7,28 @@ class ComputerPlayer < Player
     super(piece, :Computer)
   end
 
-  def get_spot(board, next_player_piece, _ui = nil, _range=nil, _depth = 0, _best_score = {})
-    return 4 if board[4] == '4'
+  def get_spot(board, opponent_piece, depth = 0, scores = {}, _ui = nil)
+    return 10 - depth if board.win_for?(@piece)
+    return depth - 10 if board.win_for?(opponent_piece)
+    return 0 if board.full?
 
-    available_spaces = []
-    best_move = nil
-    board.each do |s|
-      available_spaces << s if s != 'X' && s != 'O'
+    depth += 1
+
+    board.available_spots.each do |spot|
+      board.set_piece(spot, board.active_piece)
+      scores[spot] = get_spot(board, opponent_piece, depth)
+      board.reset_spot(spot)
     end
-    available_spaces.each do |as|
-      board[as.to_i] = @piece
-      if game_is_over(board)
-        best_move = as.to_i
-        board[as.to_i] = as
-        return best_move
-      else
-        board[as.to_i] = next_player_piece
-        if game_is_over(board)
-          best_move = as.to_i
-          board[as.to_i] = as
-          return best_move
-        else
-          board[as.to_i] = as
-        end
-      end
+
+    if depth == board.available_spots.length
+      puts scores
+      return scores.max_by { |_move, result| result }[0]
     end
-    if best_move
-      return best_move
+
+    if board.active_piece == @piece
+      scores.max_by { |_move, result| result }[1]
     else
-      n = rand(0..available_spaces.count)
-      return available_spaces[n].to_i
+      scores.min_by { |_move, result| result }[1]
     end
-  end
-
-  private
-
-  def game_is_over(b)
-    [b[0], b[1], b[2]].uniq.length == 1 ||
-      [b[3], b[4], b[5]].uniq.length == 1 ||
-      [b[6], b[7], b[8]].uniq.length == 1 ||
-      [b[0], b[3], b[6]].uniq.length == 1 ||
-      [b[1], b[4], b[7]].uniq.length == 1 ||
-      [b[2], b[5], b[8]].uniq.length == 1 ||
-      [b[0], b[4], b[8]].uniq.length == 1 ||
-      [b[2], b[4], b[6]].uniq.length == 1
   end
 end

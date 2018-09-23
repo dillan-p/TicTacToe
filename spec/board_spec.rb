@@ -93,4 +93,17 @@ RSpec.describe Board do
       it { is_expected.to eq((2..8).to_a) }
     end
   end
+
+  describe '#reset_spot' do
+    let(:grid) { ['X'].fill(nil, 1, 8) }
+    it 'resets the spot to nil' do
+      board.reset_spot(0)
+      expect(board.grid).to eq(Array.new(9))
+    end
+
+    it 'changes the active piece' do
+      board.reset_spot(0)
+      expect(board.active_piece).to eq('O')
+    end
+  end
 end
