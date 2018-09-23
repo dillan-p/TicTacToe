@@ -12,6 +12,7 @@ RSpec.describe Setup do
   let(:ui) { double }
 
   describe '#setup_players' do
+    subject { setup.setup_players }
     describe 'for a chosen game type with a chosen piece type' do
       before do
         allow(PlayerFactory).to receive(:create) {
@@ -25,26 +26,22 @@ RSpec.describe Setup do
         before do
           allow(PlayerFactory).to receive(:assign_pieces) { %w[O X] }
           allow(ui).to receive(:player_order) { 1 }
-          setup.setup_players
         end
 
         it 'doesn\'t change the order' do
-          players = [setup.player1, setup.player2]
-          expect(players[0].piece).to eq('O')
-          expect(players[1].piece).to eq('X')
+          expect(subject[0].piece).to eq('O')
+          expect(subject[1].piece).to eq('X')
         end
       end
 
       context 'when player order is 2' do
         before do
           allow(ui).to receive(:player_order) { 2 }
-          setup.setup_players
         end
 
         it 'does change the order' do
-          players = [setup.player1, setup.player2]
-          expect(players[0].piece).to eq('X')
-          expect(players[1].piece).to eq('O')
+          expect(subject[0].piece).to eq('X')
+          expect(subject[1].piece).to eq('O')
         end
       end
     end

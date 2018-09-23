@@ -6,12 +6,11 @@ require_relative 'setup'
 
 class Runner
   def initialize(setup = Setup.new)
-    @setup = setup
+    @players = setup.setup_players
   end
 
   def run
-    @setup.setup_players
-    Game.new([@setup.player1, @setup.player2]).start_game
+    Game.new(@players).start_game
   end
 end
 
