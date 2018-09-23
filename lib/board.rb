@@ -7,14 +7,17 @@ class Board
     [0, 4, 8], [2, 4, 6]
   ].freeze
 
-  attr_reader :grid
+  attr_reader :grid, :active_piece
 
-  def initialize(grid = nil)
+  def initialize(piece, grid = nil)
+    @active_piece = piece
     @grid = grid || Array.new(9)
   end
 
   def set_piece(spot, piece)
-    @grid[spot] = piece unless spot_taken?(spot)
+    return if spot_taken?(spot)
+    change_active_piece
+    @grid[spot] = piece
   end
 
   def full?
@@ -37,5 +40,9 @@ class Board
 
   def spot_taken?(spot)
     %w[X O].include?(@grid[spot])
+  end
+
+  def change_active_piece
+    @active_piece = @active_piece == 'O' ? 'X' : 'O'
   end
 end

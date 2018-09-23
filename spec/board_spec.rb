@@ -4,18 +4,28 @@ require 'spec_helper'
 require 'board'
 
 RSpec.describe Board do
-  let(:board) { described_class.new(grid) }
+  let(:board) { described_class.new(piece, grid) }
   let(:grid) { Array.new(9) }
+  let(:piece) { 'X' }
 
   describe '#set_piece' do
-    subject { board.set_piece(0, 'X') }
     context 'when spot is free' do
-      it { is_expected.to eq('X') }
+      it 'sets the piece' do
+        expect(board.set_piece(0, 'X')).to eq('X')
+      end
+
+      it 'changes the active piece' do
+        board.set_piece(0, 'X')
+        expect(board.active_piece).to eq('O')
+      end
     end
 
     context 'when spot is taken' do
       let(:grid) { ['X'].fill(nil, 1, 8) }
-      it { is_expected.to eq(nil) }
+
+      it 'returns nil' do
+        expect(board.set_piece(0, 'X')).to eq(nil)
+      end
     end
   end
 

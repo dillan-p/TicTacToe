@@ -8,7 +8,7 @@ RSpec.describe Game do
   let(:players) { [human, computer] }
   let(:computer) { double }
   let(:human) { double }
-  let(:board) { Board.new(grid) }
+  let(:board) { Board.new('X', grid) }
 
   before do
     allow(human).to receive(:piece) { 'O' }
