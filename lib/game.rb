@@ -6,36 +6,42 @@ require_relative 'console/console_ui'
 class Game
   attr_reader :board
 
-  def initialize(player1, player2, board = Board.new, ui = ConsoleUi)
+  def initialize(players, board = Board.new(players[0].piece), ui = ConsoleUi)
     @board = board
-    @player1 = player1
-    @player2 = player2
+    @players = players
     @ui = ui
   end
 
   def start_game
     @ui.render_grid(@board.grid)
     until game_is_over?
-      make_move(@player1)
-      make_move(@player2) unless game_is_over?
+      make_move
+      @players = @players.rotate
     end
     @ui.game_over
   end
 
-  def make_move(player)
+  def make_move
     loop do
-      # temp workaround to get piece before computer player changed
-      piece = player == @player1 ? @player1.piece : @player2.piece
-      valid_spots = @board.available_spots
-      spot = player.get_spot(@board.grid, piece, @ui, valid_spots)
-      break if @board.set_piece(spot, piece)
+      spot = current_player.get_spot(@board, 0, {}, @ui)
+      break if @board.set_piece(spot, current_player.piece)
     end
+    puts @board.active_piece
     @ui.render_grid(@board.grid)
   end
 
   private
 
+  def current_player
+    @players[0]
+  end
+
+  def next_player
+    @players[1]
+  end
+
   def game_is_over?
-    @board.winner? || @board.tie?
+    # just calculate winner for the last players turn (which is the next player)
+    @board.win_for?(next_player.piece) || @board.full?
   end
 end

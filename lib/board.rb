@@ -1,39 +1,53 @@
 # frozen_string_literal: true
 
 class Board
-  attr_reader :grid
+  WINNING_COMBINATIONS = [
+    [0, 1, 2], [3, 4, 5], [6, 7, 8],
+    [0, 3, 6], [1, 4, 7], [2, 5, 8],
+    [0, 4, 8], [2, 4, 6]
+  ].freeze
 
-  def initialize
-    @grid = %w[0 1 2 3 4 5 6 7 8]
+  attr_reader :grid, :active_piece
+
+  def initialize(piece, grid = nil)
+    @active_piece = piece
+    @grid = grid || Array.new(9)
   end
 
   def set_piece(spot, piece)
-    @grid[spot] = piece unless spot_taken?(spot)
+    return if spot_taken?(spot)
+    change_active_piece
+    @grid[spot] = piece
   end
 
-  def tie?
-    @grid.all? { |s| %w[X O].include?(s) }
+  def full?
+    !@grid.include?(nil)
   end
 
-  def winner?
-    b = @grid
-    [b[0], b[1], b[2]].uniq.length == 1 ||
-      [b[3], b[4], b[5]].uniq.length == 1 ||
-      [b[6], b[7], b[8]].uniq.length == 1 ||
-      [b[0], b[3], b[6]].uniq.length == 1 ||
-      [b[1], b[4], b[7]].uniq.length == 1 ||
-      [b[2], b[5], b[8]].uniq.length == 1 ||
-      [b[0], b[4], b[8]].uniq.length == 1 ||
-      [b[2], b[4], b[6]].uniq.length == 1
+  def win_for?(piece)
+    WINNING_COMBINATIONS.any? do |a, b, c|
+      @grid[a] == piece &&
+        @grid[b] == piece &&
+        @grid[c] == piece
+    end
   end
 
   def available_spots
-    @grid.reject { |i| %w[X O].include?(i) }
+    @grid.each_index.select { |i| @grid[i].nil? }
+  end
+
+  def reset_spot(spot)
+    @grid[spot] = nil
+    change_active_piece
   end
 
   private
 
   def spot_taken?(spot)
     %w[X O].include?(@grid[spot])
+  end
+
+  def change_active_piece
+    @active_piece = @active_piece == 'O' ? 'X' : 'O'
   end
 end

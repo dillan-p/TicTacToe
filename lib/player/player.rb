@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class Player
-  attr_accessor :piece, :type
+  attr_reader :piece, :type
 
-  def initialize
+  def initialize(piece, type)
     @piece = piece
     @type = type
   end

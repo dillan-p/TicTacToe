@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-class InvalidInputError < StandardError; end
+require_relative 'player'
 
-module HumanPlayer
-  def self.extended(mod)
-    mod.type = :Human
+class HumanPlayer < Player
+  def initialize(piece)
+    super(piece, :Human)
   end
 
-  def get_spot(_board = nil, _piece = nil, ui, range)
-    ui.choose_spot(range)
+  def get_spot(_board = nil, depth, score, ui)
+    ui.choose_spot((0..8))
   end
 end

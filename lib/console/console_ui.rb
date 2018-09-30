@@ -17,10 +17,10 @@ class ConsoleUi
     retry
   end
 
-  def self.player_piece(player1, player2, value_range)
+  def self.player_piece(value_range)
     puts 'Which piece allocation would you like?'
-    puts "1 - #{player1.type}: O, #{player2.type}: X"
-    puts "2 - #{player1.type}: X, #{player2.type}: O"
+    puts "1 - Player 1: O, Player 2: X"
+    puts "2 - Player 1: X, Player 2: O"
 
     user_input(value_range)
   rescue InvalidInputError => e
@@ -53,10 +53,11 @@ class ConsoleUi
   end
 
   def self.render_grid(grid)
-    puts  " #{grid[0]} | #{grid[1]} | #{grid[2]} "\
+    grid_ui = grid.map { |i| i.nil? ? ' ' : i }
+    puts  " #{grid_ui[0]} | #{grid_ui[1]} | #{grid_ui[2]} "\
           "\n===+===+===\n"\
-          " #{grid[3]} | #{grid[4]} | #{grid[5]} "\
+          " #{grid_ui[3]} | #{grid_ui[4]} | #{grid_ui[5]} "\
           "\n===+===+===\n"\
-          " #{grid[6]} | #{grid[7]} | #{grid[8]} \n"
+          " #{grid_ui[6]} | #{grid_ui[7]} | #{grid_ui[8]} \n"
   end
 end

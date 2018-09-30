@@ -5,9 +5,6 @@ require 'console/console_ui'
 require 'console/console_input'
 
 RSpec.describe ConsoleUi do
-  let(:player1) { double(:player1, type: 'X') }
-  let(:player2) { double(:player2, type: 'O') }
-
   let(:range) { (1..1) }
 
   describe '#game_type' do
@@ -34,7 +31,7 @@ RSpec.describe ConsoleUi do
   end
 
   describe '#player_piece' do
-    subject { described_class.player_piece(player1, player2, range) }
+    subject { described_class.player_piece(range) }
 
     context 'when input is valid' do
       before do
@@ -51,7 +48,7 @@ RSpec.describe ConsoleUi do
       end
 
       it 'doesn\'t throw an error' do
-        expect { described_class.player_piece(player1, player2, range) }
+        expect { described_class.player_piece(range) }
           .to_not raise_error
       end
     end
@@ -81,12 +78,21 @@ RSpec.describe ConsoleUi do
   end
 
   describe '#render_grid' do
-    let(:grid) { %w[0 1 2 3 4 5 6 7 8 9] }
+    let(:grid) { Array.new(9, 'X') }
 
-    it 'print the grid' do
+    it 'prints the grid' do
       expect { described_class.render_grid(grid) }.to output(
-        " 0 | 1 | 2 \n===+===+===\n 3 | 4 | 5 \n===+===+===\n 6 | 7 | 8 \n"
+        " X | X | X \n===+===+===\n X | X | X \n===+===+===\n X | X | X \n"
       ).to_stdout
+    end
+
+    context 'when there are empty grid items' do
+      let(:grid) { Array.new(9) }
+      it 'replaces empty items with a space' do
+        expect { described_class.render_grid(grid) }.to output(
+          " \s | \s | \s \n===+===+===\n \s | \s | \s \n===+===+===\n \s | \s | \s \n"
+        ).to_stdout
+      end
     end
   end
 
