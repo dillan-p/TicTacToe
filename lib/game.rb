@@ -26,7 +26,6 @@ class Game
       spot = current_player.get_spot(@board, 0, {}, @ui)
       break if @board.set_piece(spot, current_player.piece)
     end
-    puts @board.active_piece
     @ui.render_grid(@board.grid)
   end
 
