@@ -6,7 +6,7 @@ require_relative 'console/console_ui'
 class Game
   attr_reader :board
 
-  def initialize(players, board = Board.new(players[0]), ui = ConsoleUi)
+  def initialize(players, board = Board.new(players[0].piece), ui = ConsoleUi)
     @board = board
     @players = players
     @ui = ui
@@ -23,10 +23,10 @@ class Game
 
   def make_move
     loop do
-      # temp workaround before computer player changed
-      spot = current_player.get_spot(@board.grid, next_player.piece, @ui, (0..8))
+      spot = current_player.get_spot(@board, 0, {}, @ui)
       break if @board.set_piece(spot, current_player.piece)
     end
+    puts @board.active_piece
     @ui.render_grid(@board.grid)
   end
 

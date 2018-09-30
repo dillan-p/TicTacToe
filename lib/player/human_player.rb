@@ -7,7 +7,7 @@ class HumanPlayer < Player
     super(piece, :Human)
   end
 
-  def get_spot(_board = nil, _piece = nil, ui, range)
-    ui.choose_spot(range)
+  def get_spot(_board = nil, depth, score, ui)
+    ui.choose_spot((0..8))
   end
 end
